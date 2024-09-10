@@ -16,19 +16,6 @@ use commands::goal::{
 use commands::portfolio::{compute_holdings, get_historical, get_income_summary};
 use commands::settings::{get_settings, update_currency, update_settings};
 
-<<<<<<< HEAD
-use wealthfolio_lib::db;
-
-use wealthfolio_lib::account;
-use wealthfolio_lib::activity;
-use wealthfolio_lib::asset;
-use wealthfolio_lib::goal;
-use wealthfolio_lib::models;
-use wealthfolio_lib::portfolio;
-use wealthfolio_lib::settings;
-
-use wealthfolio_lib::app_state;
-=======
 use wealthfolio_core::db;
 
 use wealthfolio_core::account;
@@ -40,7 +27,6 @@ use wealthfolio_core::portfolio;
 use wealthfolio_core::settings;
 
 use wealthfolio_core::app_state;
->>>>>>> e3c6b501510c499cdb8069a0aa679624f066f628
 
 use app_state::AppState;
 use asset::asset_service;

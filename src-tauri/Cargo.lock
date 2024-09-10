@@ -4363,15 +4363,6 @@ dependencies = [
 name = "wealthfolio_core"
 version = "1.0.10"
 dependencies = [
- "tauri",
- "tauri-build",
- "wealthfolio-lib",
-]
-
-[[package]]
-name = "wealthfolio-lib"
-version = "1.0.6"
-dependencies = [
  "chrono",
  "csv",
  "diesel",
