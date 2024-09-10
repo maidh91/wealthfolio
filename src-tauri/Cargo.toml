@@ -1,6 +1,6 @@
 [package]
 name = "wealthfolio-app"
-version = "1.0.7"
+version = "1.0.10"
 description = "Portfolio tracker"
 authors = ["Aziz Fadil"]
 license = "LGPL-3.0"
@@ -13,7 +13,11 @@ edition = "2021"
 tauri-build = { version = "1.5.4", features = [] }
 
 [dependencies]
+<<<<<<< HEAD
 wealthfolio-lib = { path = "../src-rust-lib" }
+=======
+wealthfolio_core = { path = "../src-core" }
+>>>>>>> e3c6b501510c499cdb8069a0aa679624f066f628
 tauri = { version = "1.5", features = [ "updater", "dialog-open", "fs-all", "path-all", "window-start-dragging", "shell-open"] }
 
 [features]
