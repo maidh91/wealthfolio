@@ -2,19 +2,20 @@ import { invoke } from '@tauri-apps/api';
 import * as z from 'zod';
 import { Account } from '@/lib/types';
 import { newAccountSchema } from '@/lib/schemas';
-import { invokeTauri, isDesktop } from '@/commands/utils';
+import { getRunEnv, invokeTauri, RUN_ENV } from '@/commands/utils';
 
 type NewAccount = z.infer<typeof newAccountSchema>;
 
+const runEnv = getRunEnv();
+
 export const getAccounts = async (): Promise<Account[]> => {
   try {
-    if (isDesktop()) {
-      const accounts = await invokeTauri('get_accounts');
-      return accounts as Account[];
-    } else {
-      // TODO: Implement more platform-specific logic here
-      // e.g. web standalone with localForage
-      throw new Error('Not implemented');
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const accounts = await invokeTauri('get_accounts');
+        return accounts as Account[];
+      default:
+       throw new Error(`Unsupported: ${runEnv}`);
     }
   } catch (error) {
     console.error('Error fetching accounts:', error);

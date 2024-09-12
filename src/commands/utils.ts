@@ -1,5 +1,17 @@
-export const isDesktop = () => {
-    return !!window.__TAURI__;
+export enum RUN_ENV {
+    DESKTOP = 'desktop',
+    BROWSER = 'browser',
+    UNSUPPORTED = 'unsupported',
+};
+
+export const getRunEnv = () => {
+    if (window.__TAURI__) {
+        return RUN_ENV.DESKTOP;
+    }
+    if (window.indexedDB) {
+        return RUN_ENV.BROWSER;
+    }
+    return RUN_ENV.UNSUPPORTED;
 }
 
 export const invokeTauri = async (command: string, payload?: Record<string, unknown>) => {
