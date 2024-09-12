@@ -5,10 +5,10 @@ export enum RUN_ENV {
 };
 
 export const getRunEnv = () => {
-    if (window.__TAURI__) {
+    if (typeof window !== 'undefined' && window.__TAURI__) {
         return RUN_ENV.DESKTOP;
     }
-    if (window.indexedDB) {
+    if (typeof window !== 'undefined' && window.indexedDB) {
         return RUN_ENV.BROWSER;
     }
     return RUN_ENV.UNSUPPORTED;
