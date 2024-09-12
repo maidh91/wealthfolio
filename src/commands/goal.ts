@@ -1,14 +1,21 @@
-import { invoke } from '@tauri-apps/api';
-import * as z from 'zod';
+import z from 'zod';
 import { Goal, GoalAllocation } from '@/lib/types';
 import { newGoalSchema } from '@/lib/schemas';
+import { getRunEnv, invokeTauri, RUN_ENV } from '@/commands/utils';
+
+const runEnv = getRunEnv();
 
 type NewGoal = z.infer<typeof newGoalSchema>;
 
 export const getGoals = async (): Promise<Goal[]> => {
   try {
-    const goals = await invoke('get_goals');
-    return goals as Goal[];
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const goals = await invokeTauri<Goal[]>('get_goals');
+        return goals;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error fetching goals:', error);
     throw error;
@@ -23,8 +30,13 @@ export const createGoal = async (goal: NewGoal): Promise<Goal> => {
     isAchieved: false,
   };
   try {
-    const createdGoal = await invoke('create_goal', { goal: newGoal });
-    return createdGoal as Goal;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const createdGoal = await invokeTauri<Goal>('create_goal', { goal: newGoal });
+        return createdGoal;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error creating goal:', error);
     throw error;
@@ -33,8 +45,13 @@ export const createGoal = async (goal: NewGoal): Promise<Goal> => {
 
 export const updateGoal = async (goal: Goal): Promise<Goal> => {
   try {
-    const updatedGoal = await invoke('update_goal', { goal });
-    return updatedGoal as Goal;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const updatedGoal = await invokeTauri<Goal>('update_goal', { goal });
+        return updatedGoal;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error updating goal:', error);
     throw error;
@@ -43,7 +60,13 @@ export const updateGoal = async (goal: Goal): Promise<Goal> => {
 
 export const deleteGoal = async (goalId: string): Promise<void> => {
   try {
-    await invoke('delete_goal', { goalId });
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        await invokeTauri('delete_goal', { goalId });
+        return;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error deleting goal:', error);
     throw error;
@@ -52,7 +75,13 @@ export const deleteGoal = async (goalId: string): Promise<void> => {
 
 export const updateGoalsAllocations = async (allocations: GoalAllocation[]): Promise<void> => {
   try {
-    await invoke('update_goal_allocations', { allocations });
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        await invokeTauri('update_goal_allocations', { allocations });
+        return;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error saving goals allocations:', error);
     throw error;
@@ -61,8 +90,13 @@ export const updateGoalsAllocations = async (allocations: GoalAllocation[]): Pro
 
 export const getGoalsAllocation = async (): Promise<GoalAllocation[]> => {
   try {
-    const allocations = await invoke('load_goals_allocations');
-    return allocations as GoalAllocation[];
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const allocations = await invokeTauri<GoalAllocation[]>('load_goals_allocations');
+        return allocations;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    };
   } catch (error) {
     console.error('Error fetching goals allocations:', error);
     throw error;

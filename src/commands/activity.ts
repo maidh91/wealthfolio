@@ -1,7 +1,9 @@
-import { invoke } from '@tauri-apps/api';
-import * as z from 'zod';
+import z from 'zod';
 import { Activity, ActivityDetails, ActivityImport, ActivitySearchResponse } from '@/lib/types';
 import { newActivitySchema } from '@/lib/schemas';
+import { getRunEnv, invokeTauri, RUN_ENV } from '@/commands/utils';
+
+const runEnv = getRunEnv();
 
 export type NewActivity = z.infer<typeof newActivitySchema>;
 
@@ -18,8 +20,13 @@ interface Sort {
 
 export const getActivities = async (): Promise<ActivityDetails[]> => {
   try {
-    const activities = await invoke('get_activities');
-    return activities as ActivityDetails[];
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const activities = await invokeTauri<ActivityDetails[]>('get_activities');
+        return activities;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error fetching activities:', error);
     throw error;
@@ -34,15 +41,20 @@ export const searchActivities = async (
   sort: Sort,
 ): Promise<ActivitySearchResponse> => {
   try {
-    const result = await invoke('search_activities', {
-      page,
-      pageSize,
-      accountIdFilter: filters?.accountId,
-      activityTypeFilter: filters?.activityType,
-      assetIdKeyword: searchKeyword,
-      sort,
-    });
-    return result as ActivitySearchResponse;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const result = await invokeTauri<ActivitySearchResponse>('search_activities', {
+          page,
+          pageSize,
+          accountIdFilter: filters?.accountId,
+          activityTypeFilter: filters?.activityType,
+          assetIdKeyword: searchKeyword,
+          sort,
+        });
+        return result;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error fetching activities:', error);
     throw error;
@@ -52,8 +64,13 @@ export const searchActivities = async (
 // createActivity
 export const createActivity = async (activity: NewActivity): Promise<Activity> => {
   try {
-    const newActivity = await invoke('create_activity', { activity });
-    return newActivity as Activity;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const newActivity = await invokeTauri<Activity>('create_activity', { activity });
+        return newActivity;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error creating activity:', error);
     throw error;
@@ -63,8 +80,13 @@ export const createActivity = async (activity: NewActivity): Promise<Activity> =
 // updateActivity
 export const updateActivity = async (activity: NewActivity): Promise<Activity> => {
   try {
-    const updatedActivity = await invoke('update_activity', { activity });
-    return updatedActivity as Activity;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const updatedActivity = await invokeTauri<Activity>('update_activity', { activity });
+        return updatedActivity;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error updating activity:', error);
     throw error;
@@ -74,7 +96,13 @@ export const updateActivity = async (activity: NewActivity): Promise<Activity> =
 // deleteActivity
 export const deleteActivity = async (activityId: string): Promise<void> => {
   try {
-    await invoke('delete_activity', { activityId });
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        await invokeTauri('delete_activity', { activityId });
+        return;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error deleting activity:', error);
     throw error;
@@ -90,11 +118,16 @@ export const checkActivitiesImport = async ({
   file_path: string;
 }): Promise<ActivityImport[]> => {
   try {
-    const result: ActivityImport[] = await invoke('check_activities_import', {
-      accountId: account_id,
-      filePath: file_path,
-    });
-    return result;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const result = await invokeTauri<ActivityImport[]>('check_activities_import', {
+          accountId: account_id,
+          filePath: file_path,
+        });
+        return result;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error checking activities import:', error);
     throw error;
@@ -104,8 +137,13 @@ export const checkActivitiesImport = async ({
 // importActivities
 export const createActivities = async (activities: NewActivity[]): Promise<Number> => {
   try {
-    const importResult: Number = await invoke('create_activities', { activities });
-    return importResult;
+    switch (runEnv) {
+      case RUN_ENV.DESKTOP:
+        const importResult: Number = await invokeTauri('create_activities', { activities });
+        return importResult;
+      default:
+        throw new Error(`Unsupported: ${runEnv}`);
+    }
   } catch (error) {
     console.error('Error importing activities:', error);
     throw error;
