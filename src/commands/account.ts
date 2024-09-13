@@ -9,8 +9,7 @@ export const getAccounts = async (): Promise<Account[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const accounts = await invokeTauri<Account[]>('get_accounts');
-        return accounts;
+        return invokeTauri('get_accounts');
       default:
         throw new Error(`Unsupported`);
     }
@@ -25,8 +24,7 @@ export const createAccount = async (account: NewAccount): Promise<Account> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const createdAccount = await invokeTauri<Account>('create_account', { account });
-        return createdAccount;
+        return invokeTauri('create_account', { account });
       default:
         throw new Error(`Unsupported`);
     }
@@ -42,8 +40,7 @@ export const updateAccount = async (account: NewAccount): Promise<Account> => {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
         const { currency, ...updatedAccountData } = account;
-        const updatedAccount = await invokeTauri<Account>('update_account', { account: updatedAccountData });
-        return updatedAccount;
+        return invokeTauri('update_account', { account: updatedAccountData });
       default:
         throw new Error(`Unsupported`);
     }

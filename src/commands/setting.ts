@@ -6,8 +6,7 @@ export const getSettings = async (): Promise<Settings> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const settings = await invokeTauri<Settings>('get_settings');
-        return settings;
+        return invokeTauri('get_settings');
       default:
         throw new Error(`Unsupported`);
     }
@@ -22,8 +21,7 @@ export const saveSettings = async (settings: Settings): Promise<Settings> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const updatedSettings = await invokeTauri<Settings>('update_settings', { settings });
-        return updatedSettings;
+        return invokeTauri('update_settings', { settings });
       default:
         throw new Error(`Unsupported`);
     }

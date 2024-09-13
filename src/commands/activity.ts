@@ -20,8 +20,7 @@ export const getActivities = async (): Promise<ActivityDetails[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const activities = await invokeTauri<ActivityDetails[]>('get_activities');
-        return activities;
+        return invokeTauri('get_activities');
       default:
         throw new Error(`Unsupported`);
     }
@@ -41,7 +40,7 @@ export const searchActivities = async (
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const result = await invokeTauri<ActivitySearchResponse>('search_activities', {
+        return invokeTauri('search_activities', {
           page,
           pageSize,
           accountIdFilter: filters?.accountId,
@@ -49,7 +48,6 @@ export const searchActivities = async (
           assetIdKeyword: searchKeyword,
           sort,
         });
-        return result;
       default:
         throw new Error(`Unsupported`);
     }
@@ -64,8 +62,7 @@ export const createActivity = async (activity: NewActivity): Promise<Activity> =
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const newActivity = await invokeTauri<Activity>('create_activity', { activity });
-        return newActivity;
+        return invokeTauri('create_activity', { activity });
       default:
         throw new Error(`Unsupported`);
     }
@@ -80,8 +77,7 @@ export const updateActivity = async (activity: NewActivity): Promise<Activity> =
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const updatedActivity = await invokeTauri<Activity>('update_activity', { activity });
-        return updatedActivity;
+        return invokeTauri('update_activity', { activity });
       default:
         throw new Error(`Unsupported`);
     }
@@ -118,11 +114,10 @@ export const checkActivitiesImport = async ({
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const result = await invokeTauri<ActivityImport[]>('check_activities_import', {
+        return invokeTauri('check_activities_import', {
           accountId: account_id,
           filePath: file_path,
         });
-        return result;
       default:
         throw new Error(`Unsupported`);
     }
@@ -137,8 +132,7 @@ export const createActivities = async (activities: NewActivity[]): Promise<Numbe
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const importResult: Number = await invokeTauri('create_activities', { activities });
-        return importResult;
+        return invokeTauri('create_activities', { activities });
       default:
         throw new Error(`Unsupported`);
     }

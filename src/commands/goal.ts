@@ -9,8 +9,7 @@ export const getGoals = async (): Promise<Goal[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const goals = await invokeTauri<Goal[]>('get_goals');
-        return goals;
+        return invokeTauri('get_goals');
       default:
         throw new Error(`Unsupported`);
     }
@@ -30,8 +29,7 @@ export const createGoal = async (goal: NewGoal): Promise<Goal> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const createdGoal = await invokeTauri<Goal>('create_goal', { goal: newGoal });
-        return createdGoal;
+        return invokeTauri('create_goal', { goal: newGoal });
       default:
         throw new Error(`Unsupported`);
     }
@@ -45,8 +43,7 @@ export const updateGoal = async (goal: Goal): Promise<Goal> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const updatedGoal = await invokeTauri<Goal>('update_goal', { goal });
-        return updatedGoal;
+        return invokeTauri('update_goal', { goal });
       default:
         throw new Error(`Unsupported`);
     }
@@ -90,8 +87,7 @@ export const getGoalsAllocation = async (): Promise<GoalAllocation[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const allocations = await invokeTauri<GoalAllocation[]>('load_goals_allocations');
-        return allocations;
+        return invokeTauri('load_goals_allocations');
       default:
         throw new Error(`Unsupported`);
     };

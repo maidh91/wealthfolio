@@ -5,8 +5,7 @@ export const searchTicker = async (query: string): Promise<QuoteSummary[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const searchResult = await invokeTauri<QuoteSummary[]>('search_ticker', { query });
-        return searchResult;
+        return invokeTauri('search_ticker', { query });
       default:
         throw new Error(`Unsupported`);
     }
@@ -35,8 +34,7 @@ export const getAssetData = async (assetId: string): Promise<AssetData> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const result = await invokeTauri<AssetData>('get_asset_data', { assetId });
-        return result;
+        return invokeTauri('get_asset_data', { assetId });
       default:
         throw new Error(`Unsupported`);
     }

@@ -5,8 +5,7 @@ export const getHistorical = async (): Promise<FinancialHistory[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const result = await invokeTauri<FinancialHistory[]>('get_historical');
-        return result;
+        return invokeTauri('get_historical');
       default:
         throw new Error(`Unsupported`);
     }
@@ -20,8 +19,7 @@ export const computeHoldings = async (): Promise<Holding[]> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const result = await invokeTauri<Holding[]>('compute_holdings');
-        return result;
+        return invokeTauri('compute_holdings');
       default:
         throw new Error(`Unsupported`);
     }
@@ -35,8 +33,7 @@ export const getIncomeSummary = async (): Promise<IncomeSummary> => {
   try {
     switch (getRunEnv()) {
       case RUN_ENV.DESKTOP:
-        const result = await invokeTauri<IncomeSummary>('get_income_summary');
-        return result;
+        return invokeTauri('get_income_summary');
       default:
         throw new Error(`Unsupported`);
     }
