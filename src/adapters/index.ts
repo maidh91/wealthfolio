@@ -1,10 +1,11 @@
 export enum RUN_ENV {
   DESKTOP = 'desktop',
+  MOBILE = 'mobile',
   BROWSER = 'browser',
   UNSUPPORTED = 'unsupported',
 };
 
-export const getRunEnv = () => {
+export const getRunEnv = (): RUN_ENV => {
   if (typeof window !== 'undefined' && window.__TAURI__) {
     return RUN_ENV.DESKTOP;
   }
